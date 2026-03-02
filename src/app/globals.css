@@ -5,6 +5,7 @@
 :root {
   --background: #080808;
   --foreground: #e8e8e8;
+  --logo-accent: #67e8f9;
 }
 
 * {
