@@ -184,15 +184,15 @@ export default function HeroLogo() {
 
   return (
     <div
-      className="w-full aspect-square cursor-pointer select-none"
+      className="w-full h-full cursor-pointer select-none"
       onClick={() => setExplode((n) => n + 1)}
       aria-hidden
     >
       <Canvas
-        camera={{ fov: 36, position: [0, 0, 5.5] }}
+        camera={{ fov: 42, position: [0, 0, 5.5] }}
         dpr={[1, 1.8]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-        style={{ background: "transparent" }}
+        style={{ background: "transparent", width: "100%", height: "100%" }}
       >
         <Particles explodeCount={explode} />
       </Canvas>
