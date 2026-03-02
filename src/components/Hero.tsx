@@ -1,7 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Mail } from "lucide-react";
-import HeroLogo from "./HeroLogo";
+import MLTerminal from "./MLTerminal";
 
 const firstName = "Bertuğ".split("");
 const lastName  = "TAŞ".split("");
@@ -122,14 +122,12 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── RIGHT: particle sphere – fills entire right half of screen ─── */}
+      {/* ── RIGHT: ML terminal ──────────────────────────────────────────── */}
       <div
-        className="hidden lg:block relative opacity-0 animate-fade-up"
+        className="hidden lg:flex items-center opacity-0 animate-fade-up"
         style={{ animationDelay: `${nameEnd + 180}ms`, animationFillMode: "forwards" }}
       >
-        <div className="sticky top-0 h-screen w-full">
-          <HeroLogo />
-        </div>
+        <MLTerminal />
       </div>
     </section>
   );
