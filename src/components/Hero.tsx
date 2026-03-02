@@ -36,7 +36,7 @@ export default function Hero() {
   return (
     <section className="min-h-screen flex items-center px-6">
       <div className="max-w-5xl mx-auto w-full pt-24 pb-16">
-        <div className="grid items-center gap-0 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="grid items-center gap-0 lg:grid-cols-2">
           <div>
             <p
               className="font-mono text-base text-white/60 mb-5 tracking-wide opacity-0 animate-fade-up"
@@ -121,7 +121,7 @@ export default function Hero() {
           </div>
 
           <div
-            className="hidden lg:flex justify-end items-center opacity-0 animate-fade-up translate-x-8"
+            className="hidden lg:flex justify-center items-center opacity-0 animate-fade-up"
             style={{ animationDelay: `${nameEnd + 180}ms`, animationFillMode: "forwards" }}
           >
             <HeroLogo />

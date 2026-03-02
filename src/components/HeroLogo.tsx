@@ -1,140 +1,155 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-type Vec3 = [number, number, number];
+// ── Constants ────────────────────────────────────────────────────────────────
+const N        = 620;
+const RADIUS   = 1.85;
+const REPEL_R  = 1.05;
+const REPEL_F  = 0.058;
+const SPRING_K = 0.031;
+const DAMP     = 0.865;
 
-// ── Neural network topology ────────────────────────────────────────────────
-// 4 layers: input(3) → hidden(5) → hidden(5) → output(3)
-// Each layer has slight X jitter for organic feel
-const LAYERS: Vec3[][] = [
-  [
-    [-0.08,  0.70, -1.5],
-    [ 0.08,  0.00, -1.5],
-    [-0.08, -0.70, -1.5],
-  ],
-  [
-    [ 0.12,  1.10, -0.4],
-    [-0.12,  0.55, -0.4],
-    [ 0.00,  0.00, -0.4],
-    [ 0.12, -0.55, -0.4],
-    [-0.12, -1.10, -0.4],
-  ],
-  [
-    [-0.12,  1.10,  0.7],
-    [ 0.12,  0.55,  0.7],
-    [ 0.00,  0.00,  0.7],
-    [-0.12, -0.55,  0.7],
-    [ 0.12, -1.10,  0.7],
-  ],
-  [
-    [ 0.08,  0.70,  1.8],
-    [-0.08,  0.00,  1.8],
-    [ 0.08, -0.70,  1.8],
-  ],
-];
+// ── Fibonacci sphere (evenly distributed points) ─────────────────────────────
+function makeSphere(n: number, r: number): Float32Array {
+  const pos = new Float32Array(n * 3);
+  const phi = Math.PI * (Math.sqrt(5) - 1);
+  for (let i = 0; i < n; i++) {
+    const y   = 1 - (i / (n - 1)) * 2;
+    const rad = Math.sqrt(Math.max(0, 1 - y * y));
+    const t   = phi * i;
+    pos[i * 3]     = Math.cos(t) * rad * r;
+    pos[i * 3 + 1] = y * r;
+    pos[i * 3 + 2] = Math.sin(t) * rad * r;
+  }
+  return pos;
+}
 
-const NODES: Vec3[] = LAYERS.flat();
-
-// Nodes that glow cyan (highlighted / "active" in the network)
-const ACTIVE = new Set([0, 2, 5, 8, 11, 14, 15, 17]);
-
-// Build edges between every node in layer L and every node in layer L+1
-const EDGES: [number, number][] = [];
-let base = 0;
-for (let l = 0; l < LAYERS.length - 1; l++) {
-  const nextBase = base + LAYERS[l].length;
-  for (let a = 0; a < LAYERS[l].length; a++) {
-    for (let b = 0; b < LAYERS[l + 1].length; b++) {
-      EDGES.push([base + a, nextBase + b]);
+// ── Vertex colours: ~1/7 cyan, rest soft-white ───────────────────────────────
+function makeColors(n: number): Float32Array {
+  const c = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    if (i % 7 === 0) {
+      c[i * 3] = 0.40; c[i * 3 + 1] = 0.91; c[i * 3 + 2] = 0.97; // #67e8f9
+    } else {
+      c[i * 3] = 0.85; c[i * 3 + 1] = 0.85; c[i * 3 + 2] = 0.85;
     }
   }
-  base = nextBase;
+  return c;
 }
 
-// ── Sub-components ─────────────────────────────────────────────────────────
-function Connections() {
-  const geo = useMemo(() => {
-    const pos: number[] = [];
-    for (const [a, b] of EDGES) {
-      pos.push(...NODES[a], ...NODES[b]);
+// ── Particle simulation ───────────────────────────────────────────────────────
+function Particles({ explodeCount }: { explodeCount: number }) {
+  const { camera, gl } = useThree();
+  const geoRef = useRef<THREE.BufferGeometry>(null);
+
+  const origin  = useMemo(() => makeSphere(N, RADIUS), []);
+  const colors  = useMemo(() => makeColors(N), []);
+  const initPos = useMemo(() => new Float32Array(origin), [origin]);
+
+  const cur          = useRef(new Float32Array(origin));
+  const vel          = useRef(new Float32Array(N * 3));
+  const mPos         = useRef(new THREE.Vector3(0, 0, -99));
+  const prevExplode  = useRef(0);
+
+  // Project mouse onto z = 0 plane in world space
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const onMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width)  *  2 - 1;
+      const ny = -((e.clientY - rect.top)  / rect.height) *  2 + 1;
+      const ray = new THREE.Vector3(nx, ny, 0.5).unproject(camera);
+      ray.sub(camera.position).normalize();
+      const t = -camera.position.z / ray.z;
+      mPos.current.copy(camera.position).addScaledVector(ray, t);
+    };
+    canvas.addEventListener("mousemove", onMove);
+    return () => canvas.removeEventListener("mousemove", onMove);
+  }, [camera, gl]);
+
+  // Explode on click
+  useEffect(() => {
+    if (explodeCount === prevExplode.current) return;
+    prevExplode.current = explodeCount;
+    const v = vel.current, c = cur.current;
+    for (let i = 0; i < N; i++) {
+      const i3 = i * 3;
+      const len = Math.sqrt(c[i3] ** 2 + c[i3 + 1] ** 2 + c[i3 + 2] ** 2) || 1;
+      const str = 0.22 + Math.random() * 0.26;
+      v[i3]     += (c[i3]     / len) * str;
+      v[i3 + 1] += (c[i3 + 1] / len) * str;
+      v[i3 + 2] += (c[i3 + 2] / len) * str;
     }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-    return g;
-  }, []);
-
-  return (
-    <lineSegments geometry={geo}>
-      <lineBasicMaterial color="#ffffff" transparent opacity={0.07} />
-    </lineSegments>
-  );
-}
-
-function NodeSpheres() {
-  const pulseMeshes = useRef<(THREE.Mesh | null)[]>([]);
+  }, [explodeCount]);
 
   useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    pulseMeshes.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const s = 1 + 0.18 * Math.sin(t * 1.6 + i * 1.1);
-      mesh.scale.setScalar(s);
-    });
-  });
+    const geo = geoRef.current;
+    if (!geo) return;
 
-  return (
-    <>
-      {NODES.map((pos, i) => {
-        const active = ACTIVE.has(i);
-        return (
-          <mesh
-            key={i}
-            position={pos}
-            ref={(el) => {
-              if (active) pulseMeshes.current[i] = el;
-            }}
-          >
-            <sphereGeometry args={[active ? 0.095 : 0.062, 18, 18]} />
-            <meshStandardMaterial
-              color={active ? "#67e8f9" : "#c8c8c8"}
-              emissive={active ? "#67e8f9" : "#000000"}
-              emissiveIntensity={active ? 1.2 : 0}
-              metalness={0.2}
-              roughness={0.25}
-            />
-          </mesh>
-        );
-      })}
-    </>
-  );
-}
+    const angle = clock.elapsedTime * 0.16;
+    const cosA  = Math.cos(angle);
+    const sinA  = Math.sin(angle);
+    const c     = cur.current;
+    const v     = vel.current;
+    const m     = mPos.current;
 
-function NeuralNet({ reduceMotion }: { reduceMotion: boolean }) {
-  const groupRef = useRef<THREE.Group>(null);
+    for (let i = 0; i < N; i++) {
+      const i3 = i * 3;
 
-  useFrame(({ clock }, delta) => {
-    if (!groupRef.current) return;
-    if (reduceMotion) {
-      groupRef.current.rotation.y = 0.45;
-      return;
+      // Rotate home position around Y (gives slow auto-rotation)
+      const ox = origin[i3], oz = origin[i3 + 2];
+      const hx =  ox * cosA + oz * sinA;
+      const hy =  origin[i3 + 1];
+      const hz = -ox * sinA + oz * cosA;
+
+      // Mouse repulsion
+      const dx = c[i3] - m.x, dy = c[i3 + 1] - m.y, dz = c[i3 + 2] - m.z;
+      const d2 = dx * dx + dy * dy + dz * dz;
+      if (d2 < REPEL_R * REPEL_R && d2 > 1e-5) {
+        const d = Math.sqrt(d2);
+        const f = REPEL_F * (1 - d / REPEL_R);
+        v[i3]     += (dx / d) * f;
+        v[i3 + 1] += (dy / d) * f;
+        v[i3 + 2] += (dz / d) * f;
+      }
+
+      // Spring toward rotating home
+      v[i3]     += (hx - c[i3])     * SPRING_K;
+      v[i3 + 1] += (hy - c[i3 + 1]) * SPRING_K;
+      v[i3 + 2] += (hz - c[i3 + 2]) * SPRING_K;
+
+      // Damping + integrate
+      v[i3]     *= DAMP; c[i3]     += v[i3];
+      v[i3 + 1] *= DAMP; c[i3 + 1] += v[i3 + 1];
+      v[i3 + 2] *= DAMP; c[i3 + 2] += v[i3 + 2];
     }
-    groupRef.current.rotation.y += delta * 0.28;
-    groupRef.current.rotation.x =
-      Math.sin(clock.elapsedTime * 0.55) * 0.07;
+
+    const attr = geo.attributes.position as THREE.BufferAttribute;
+    (attr.array as Float32Array).set(c);
+    attr.needsUpdate = true;
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      <Connections />
-      <NodeSpheres />
-    </group>
+    <points>
+      <bufferGeometry ref={geoRef}>
+        <bufferAttribute attach="attributes-position" args={[initPos, 3]} />
+        <bufferAttribute attach="attributes-color"    args={[colors,  3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.027}
+        vertexColors
+        transparent
+        opacity={0.88}
+        sizeAttenuation
+      />
+    </points>
   );
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function hasWebGL() {
   if (typeof document === "undefined") return false;
   const c = document.createElement("canvas");
@@ -153,12 +168,12 @@ function useMediaQuery(q: string) {
   return m;
 }
 
-// ── Export ─────────────────────────────────────────────────────────────────
+// ── Export ────────────────────────────────────────────────────────────────────
 export default function HeroLogo() {
   const [mounted, setMounted] = useState(false);
-  const [webgl, setWebgl] = useState(false);
+  const [webgl,   setWebgl]   = useState(false);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
-  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const [explode, setExplode] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -168,17 +183,18 @@ export default function HeroLogo() {
   if (!mounted || !isDesktop || !webgl) return null;
 
   return (
-    <div className="h-[360px] w-[360px]" aria-hidden>
+    <div
+      className="w-full aspect-square cursor-pointer select-none"
+      onClick={() => setExplode((n) => n + 1)}
+      aria-hidden
+    >
       <Canvas
-        camera={{ fov: 38, position: [0, 0, 5.5] }}
-        dpr={[1, 1.6]}
+        camera={{ fov: 36, position: [0, 0, 5.5] }}
+        dpr={[1, 1.8]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[3, 4, 4]} intensity={1.0} />
-        <pointLight position={[-2, -1, 2]} intensity={1.2} color="#67e8f9" />
-        <NeuralNet reduceMotion={reduceMotion} />
+        <Particles explodeCount={explode} />
       </Canvas>
     </div>
   );
