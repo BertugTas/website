@@ -4,34 +4,41 @@ export default function Hero() {
   return (
     <section className="min-h-screen flex items-center px-6">
       <div className="max-w-5xl mx-auto w-full pt-24 pb-16">
-        <p className="font-mono text-sm text-white/30 mb-6">
-          Merhaba, ben
+        <p className="font-mono text-base text-white/60 mb-5 tracking-wide">
+          Ben
         </p>
 
-        <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tight mb-4">
-          Bertuğ Taş
+        <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-4 leading-none">
+          <span className="text-white">Bertuğ </span>
+          <span className="text-white font-black">TAŞ</span>
         </h1>
 
-        <h2 className="text-xl md:text-2xl text-white/40 font-light mb-8">
-          Veri Bilimi & İş Zekası
+        <h2 className="text-lg md:text-xl text-white/55 font-normal mb-10 tracking-wide">
+          Veri Bilimi & Veri Mühendisi
         </h2>
 
-        <p className="text-white/50 text-base max-w-xl leading-relaxed mb-12">
-          Dokuz Eylül Üniversitesi Bilgisayar Bilimi öğrencisi.
-          Makine öğrenmesi modelleri geliştiriyor, SQL ve Python
-          ile veri analizi yapıyor, Power BI ile içgörüler üretiyorum.
+        <p className="text-white/70 text-base max-w-xl leading-relaxed mb-4">
+          Dokuz Eylül Üniversitesi Bilgisayar Bilimi öğrencisiyim. Veri
+          bilimi alanında makine öğrenmesi modelleri geliştiriyor, Python
+          ve SQL ile büyük veri setlerini analiz ediyor, istatistiksel
+          yöntemlerle veriden anlamlı içgörüler çıkarıyorum.
+        </p>
+
+        <p className="text-white/45 text-sm max-w-xl leading-relaxed mb-12">
+          Nesne yönelimli programlama prensiplerini C# ile uygulayan,
+          veri mühendisliği süreçlerini otomatize eden çözümler üretiyorum.
         </p>
 
         <div className="flex items-center gap-6">
           <a
             href="#projects"
-            className="text-sm font-medium text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-200"
+            className="text-sm font-medium text-white border border-white/25 px-6 py-2.5 hover:bg-white hover:text-black transition-all duration-200 tracking-wide"
           >
             Projeler
           </a>
           <a
             href="#contact"
-            className="text-sm text-white/40 hover:text-white transition-colors"
+            className="text-sm text-white/50 hover:text-white transition-colors"
           >
             İletişim →
           </a>
@@ -49,7 +56,7 @@ export default function Hero() {
               target={s.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="text-white/25 hover:text-white transition-colors"
+              className="text-white/35 hover:text-white transition-colors"
             >
               {s.icon}
             </a>

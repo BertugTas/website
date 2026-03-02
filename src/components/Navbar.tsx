@@ -26,8 +26,8 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-        <a href="#" className="font-mono text-sm text-white/60 hover:text-white transition-colors">
-          bertugtas
+        <a href="#" className="font-mono text-sm text-white/50 hover:text-white transition-colors tracking-wide">
+          Bertug Tas
         </a>
 
         <ul className="hidden md:flex items-center gap-10">

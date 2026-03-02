@@ -4,19 +4,19 @@ import { useEffect, useRef } from "react";
 
 const skillGroups = [
   {
-    title: "Programlama",
+    title: "Programlama Dilleri",
     skills: ["Python", "SQL (T-SQL / PL/pgSQL)", "C#"],
   },
   {
-    title: "Veri Bilimi & ML",
+    title: "Veri Bilimi & Makine Öğrenmesi",
     skills: ["pandas", "NumPy", "scikit-learn", "matplotlib", "seaborn"],
   },
   {
-    title: "İş Zekası & Veritabanı",
+    title: "Veri Görselleştirme & Veritabanı",
     skills: ["Power BI", "DAX", "MS SQL Server", "PostgreSQL", "Excel"],
   },
   {
-    title: "Araçlar",
+    title: "Araçlar & Teknolojiler",
     skills: ["Git", "Playwright", "Twilio API", "SSMS", "pgAdmin", "VS Code"],
   },
 ];
@@ -38,20 +38,20 @@ export default function Skills() {
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-3 gap-16">
           <div className="reveal">
-            <span className="font-mono text-xs text-white/20 tracking-widest uppercase">02 / Beceriler</span>
+            <span className="font-mono text-xs text-white/25 tracking-widest uppercase">02 / Beceriler</span>
           </div>
 
           <div className="md:col-span-2 reveal">
-            <div className="grid sm:grid-cols-2 gap-10">
+            <div className="grid sm:grid-cols-2 gap-12">
               {skillGroups.map((group) => (
                 <div key={group.title}>
-                  <h3 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-4">
+                  <h3 className="text-xs font-mono text-white/35 uppercase tracking-widest mb-5">
                     {group.title}
                   </h3>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {group.skills.map((skill) => (
-                      <li key={skill} className="text-sm text-white/60 flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-white/20 flex-shrink-0" />
+                      <li key={skill} className="text-sm text-white/70 flex items-center gap-3">
+                        <span className="w-1 h-1 rounded-full bg-white/30 flex-shrink-0" />
                         {skill}
                       </li>
                     ))}
