@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bertuğ Taş | Data Science & Software Developer",
+  title: "Bertuğ Taş",
   description:
-    "Dokuz Eylül Üniversitesi Bilgisayar Mühendisliği öğrencisi. Veri bilimi, iş zekası ve yazılım geliştirme alanlarında çalışıyorum.",
+    "Dokuz Eylül Üniversitesi Bilgisayar Bilimi öğrencisi. Veri bilimi, iş zekası ve yazılım geliştirme.",
   keywords: [
     "Bertuğ Taş",
     "Data Science",
@@ -28,23 +28,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Bertuğ Taş" }],
   openGraph: {
-    title: "Bertuğ Taş | Data Science & Software Developer",
-    description:
-      "Dokuz Eylül Üniversitesi Bilgisayar Mühendisliği öğrencisi. Veri bilimi ve yazılım geliştirme.",
+    title: "Bertuğ Taş",
+    description: "Veri bilimi ve yazılım geliştirme.",
     url: "https://bertugtas.com.tr",
-    siteName: "Bertuğ Taş Portfolio",
+    siteName: "Bertuğ Taş",
     locale: "tr_TR",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Bertuğ Taş | Data Science & Software Developer",
-    description: "Veri bilimi, iş zekası ve yazılım geliştirme.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -55,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="tr" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#020817] text-slate-200`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#080808] text-[#e8e8e8]`}
       >
         {children}
       </body>
