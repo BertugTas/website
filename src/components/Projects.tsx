@@ -5,61 +5,52 @@ import { useEffect, useRef } from "react";
 const projects = [
   {
     featured: true,
-    title: "Beyin MRI Görüntü Sınıflandırma",
-    area: "Derin Öğrenme",
+    title: "Beyin MRI Tümör Sınıflandırma Sistemi",
+    area: "Derin Öğrenme · Tıbbi Görüntü Analizi",
     description:
-      "Tıbbi görüntü işleme alanında CNN mimarisi kullanan derin öğrenme projesi. Beyin MRI veri seti üzerinde eğitilen model, tümör sınıflandırmasında yüksek doğruluk oranı elde etti.",
-    stack: ["Python", "CNN", "Deep Learning", "NumPy", "matplotlib"],
+      "CNN mimarisi kullanılarak beyin MRI görüntülerinden tümör tespiti ve sınıflandırması. Veri augmentasyonu ile model genelleştirme kapasitesi artırıldı; precision, recall ve F1 metrikleriyle kapsamlı model değerlendirmesi yapıldı.",
+    stack: ["Python", "TensorFlow / Keras", "CNN", "NumPy", "OpenCV"],
     metrics: [
-      { val: "CNN", valColor: "var(--cyan)",  key: "Mimari" },
-      { val: "MRI", valColor: "var(--green)", key: "Görüntü" },
+      { val: "CNN",  valColor: "var(--cyan)",  key: "Mimari" },
+      { val: "MRI",  valColor: "var(--green)", key: "Veri Seti" },
     ],
     href: "https://github.com/BertugTas/Brain-MRI-Classification",
   },
   {
     featured: false,
-    title: "ML Meme Kanseri Sınıflandırma",
-    area: "Makine Öğrenmesi",
+    title: "Kanser Teşhis Modeli — Çok Algoritma Analizi",
+    area: "Makine Öğrenmesi · Sağlık Analitiği",
     description:
-      "Birden fazla sınıflandırma algoritmasının karşılaştırmalı analizi. Logistic Regression, Random Forest, SVM ve KNN modelleri doğruluk, hassasiyet ve geri çağırma metrikleriyle karşılaştırıldı.",
-    stack: ["Python", "scikit-learn", "pandas", "NumPy"],
+      "Meme kanseri teşhisinde Logistic Regression, Random Forest, SVM ve KNN algoritmalarının karşılaştırmalı analizi. ROC eğrileri ve confusion matrix ile model seçim süreci yürütüldü.",
+    stack: ["Python", "scikit-learn", "pandas", "NumPy", "matplotlib"],
     href: "https://github.com/BertugTas/ML-BreastCancer-Classification",
   },
   {
     featured: false,
-    title: "Kariyer İlan Otomasyon Botu",
-    area: "Otomasyon",
+    title: "Kurumsal İş Zekası Dashboard",
+    area: "Veri Mühendisliği · İş Zekası",
     description:
-      "Playwright ile hedef platformları tarayan, yeni ilanları tespit edip Twilio API aracılığıyla anlık SMS bildirimi gönderen tam otomatik iş akışı. Zamanlanmış çalışma ve filtreleme desteği.",
-    stack: ["Python", "Playwright", "Twilio API"],
-    href: "https://github.com/BertugTas/Kariyer-ilan-Botu",
-  },
-  {
-    featured: false,
-    title: "Veritabanı Yönetim Sistemi",
-    area: "Yazılım Geliştirme",
-    description:
-      "OOP prensipleriyle C# üzerinde geliştirilen fatura ve stok yönetim uygulaması. MS SQL Server backend ile CRUD operasyonları, raporlama ve kullanıcı yönetimi.",
-    stack: ["C#", "OOP", "MS SQL Server", "T-SQL"],
-    href: "https://github.com/BertugTas/DataBaseUI",
-  },
-  {
-    featured: false,
-    title: "Power BI Eğitim Analitik Dashboard",
-    area: "Veri Görselleştirme",
-    description:
-      "Kurumsal eğitim verisini DAX ölçümleri ve hesaplanmış sütunlarla modelleyen, KPI takibi ve trend analizini interaktif görsellerle sunan iş zekası raporu.",
-    stack: ["Power BI", "DAX", "MS SQL Server", "PostgreSQL"],
+      "Kurumsal eğitim verilerini DAX hesaplamaları ve star-schema modeliyle yapılandıran iş zekası raporu. KPI takibi, dönemsel karşılaştırma ve trend analizini interaktif görseller ile sunar.",
+    stack: ["Power BI", "DAX", "MS SQL Server", "T-SQL"],
     href: "https://github.com/BertugTas",
   },
   {
     featured: false,
-    title: "AI İçerik Araçları Rehberi",
-    area: "Araştırma",
+    title: "Otomatik Veri Toplama & Uyarı Sistemi",
+    area: "Otomasyon · Veri Pipeline",
     description:
-      "İçerik üreticileri için erişilebilir yapay zeka araçlarını kategorize eden, kullanım senaryolarıyla açıklayan kapsamlı bir referans kaynağı.",
-    stack: ["AI Tools", "İçerik Üretimi", "Dokümantasyon"],
-    href: "https://github.com/BertugTas/AI-icerik-araclari",
+      "Hedef platformları zamanlanmış aralıklarla tarayan, belirlenen kriterlere uyan kayıtları tespit eden ve Twilio API üzerinden anlık bildirim ileten veri toplama pipeline'ı.",
+    stack: ["Python", "Playwright", "Twilio API", "Zamanlayıcı"],
+    href: "https://github.com/BertugTas/Kariyer-ilan-Botu",
+  },
+  {
+    featured: false,
+    title: "Kurumsal Veritabanı Yönetim Sistemi",
+    area: "Yazılım Geliştirme · Veritabanı",
+    description:
+      "OOP prensipleriyle C# üzerinde geliştirilen fatura, stok ve kullanıcı yönetimi uygulaması. MS SQL Server backend ile rol tabanlı yetkilendirme, CRUD operasyonları ve raporlama modülü.",
+    stack: ["C#", "OOP", "MS SQL Server", "T-SQL", "Windows Forms"],
+    href: "https://github.com/BertugTas/DataBaseUI",
   },
 ];
 
@@ -78,11 +69,11 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--bg3)")}
       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--bg2)")}
     >
-      {/* Gradient overlay on hover */}
+      {/* Subtle hover gradient */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
         style={{
-          background: "linear-gradient(135deg, rgba(0,229,255,0.03), transparent)",
+          background: "linear-gradient(135deg, rgba(103,232,249,0.03), transparent)",
         }}
       />
 
@@ -92,9 +83,8 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
           <span
             className="text-[0.6rem] uppercase tracking-[0.2em] px-2 py-0.5"
             style={{
-              color: "var(--cyan)",
-              border: "1px solid rgba(0,229,255,0.2)",
-              background: "rgba(0,229,255,0.05)",
+              color: "var(--muted2)",
+              border: "1px solid var(--border)",
             }}
           >
             {project.area}
@@ -149,8 +139,8 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
               key={m.key}
               className="px-4 py-3 text-center"
               style={{
-                background: "rgba(0,229,255,0.05)",
-                border: "1px solid rgba(0,229,255,0.12)",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid var(--border)",
               }}
             >
               <span
@@ -206,7 +196,7 @@ export default function Projects() {
             className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-tight leading-none"
             style={{ color: "var(--text)" }}
           >
-            Projeler
+            Çalışmalar
           </h2>
           <div
             className="flex-1 h-px"
@@ -222,30 +212,6 @@ export default function Projects() {
           {projects.map((project) => (
             <ProjectCard key={project.title} project={project} />
           ))}
-        </div>
-
-        {/* GitHub link */}
-        <div className="mt-8 text-center reveal" style={{ transitionDelay: "0.2s" }}>
-          <a
-            href="https://github.com/BertugTas"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-7 py-3 text-[0.75rem] uppercase tracking-[0.1em] transition-all duration-200"
-            style={{
-              border: "1px solid var(--border)",
-              color: "var(--muted2)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--cyan)";
-              (e.currentTarget as HTMLElement).style.color = "var(--cyan)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-              (e.currentTarget as HTMLElement).style.color = "var(--muted2)";
-            }}
-          >
-            Tüm projeler GitHub&apos;da →
-          </a>
         </div>
       </div>
     </section>

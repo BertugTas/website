@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 
 const details = [
-  ["Üniversite", "Dokuz Eylül"],
+  ["Üniversite", "Dokuz Eylül Üni."],
   ["Bölüm",      "Bilgisayar Bilimi"],
-  ["Şehir",      "İzmir, TR"],
-  ["Odak",       "ML / DL / BI"],
-  ["Durum",      "● Açık",  "green"],
-  ["GitHub",     "BertugTas"],
+  ["Konum",      "İzmir, TR"],
+  ["Uzmanlık",   "Veri Bilimi & ML"],
+  ["Durum",      "● Müsait",          "green"],
+  ["Hedef Rol",  "Veri Mühendisi"],
 ];
 
 export default function About() {
@@ -60,20 +60,25 @@ export default function About() {
             <p className="text-sm leading-[2]" style={{ color: "var(--muted2)" }}>
               <span style={{ color: "var(--cyan)" }}>Dokuz Eylül Üniversitesi</span>{" "}
               Bilgisayar Bilimi bölümünde öğrenciyim. İzmir merkezli olarak çalışıyor,
-              veri bilimi alanında kendimi sürekli geliştiriyorum.
+              veri bilimi ve makine öğrenmesi alanında teorik birikimimi gerçek
+              projelere dönüştürüyorum.
             </p>
             <p className="text-sm leading-[2]" style={{ color: "var(--muted2)" }}>
               Temel odağım{" "}
-              <span style={{ color: "var(--cyan)" }}>makine öğrenmesi</span> ve{" "}
-              <span style={{ color: "var(--cyan)" }}>derin öğrenme</span>. Tıbbi görüntü
-              sınıflandırmasından kanser teşhis modellerine kadar gerçek dünya
-              problemlerini veriye dayalı yaklaşımlarla çözüyorum.
+              <span style={{ color: "var(--cyan)" }}>makine öğrenmesi modeli geliştirme</span> ve{" "}
+              <span style={{ color: "var(--cyan)" }}>derin öğrenme</span>.
+              Sınıflandırma problemlerinden CNN mimarisine kadar geniş bir alanda
+              çalışıyorum; özellikle{" "}
+              <span style={{ color: "var(--cyan)" }}>tıbbi görüntü analizi</span> ve
+              teşhis sistemleri üzerine aktif projelerim var.
             </p>
             <p className="text-sm leading-[2]" style={{ color: "var(--muted2)" }}>
-              <span style={{ color: "var(--green)" }}>Veri mühendisliği</span> tarafında
-              SQL optimizasyonu ve Power BI ile kurumsal karar destek sistemleri
-              üretiyorum. Playwright ile web otomasyon çözümleri ve Twilio API
-              entegrasyonları da uzmanlık alanlarım arasında.
+              Veri mühendisliği tarafında{" "}
+              <span style={{ color: "var(--green)" }}>SQL ve PostgreSQL</span> ile
+              veritabanı tasarımı ve sorgu optimizasyonu yapıyorum.{" "}
+              <span style={{ color: "var(--green)" }}>Power BI ve DAX</span>{" "}
+              konularında yetkinim; kurumsal veriyi anlamlı iş kararlarına
+              dönüştürecek analitik yapılar kuruyorum.
             </p>
           </div>
 

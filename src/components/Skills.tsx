@@ -4,37 +4,40 @@ import { useEffect, useRef } from "react";
 
 const skillGroups = [
   {
-    icon: "🧠",
-    title: "Veri Bilimi & ML",
-    sub: "Sınıflandırma, regresyon ve görüntü işleme üzerine model geliştirme.",
+    icon: "◈",
+    title: "Makine Öğrenmesi",
+    sub: "Sınıflandırma, regresyon ve ensemble yöntemleriyle model geliştirme, değerlendirme ve optimizasyon.",
     bars: [
-      { name: "scikit-learn",        pct: 92, variant: "" },
-      { name: "pandas / NumPy",      pct: 90, variant: "" },
-      { name: "matplotlib / seaborn", pct: 85, variant: "" },
+      { name: "Model Tasarımı & Eğitimi",          pct: 92, variant: "" },
+      { name: "Veri Analizi & Keşifsel Analiz",    pct: 90, variant: "" },
+      { name: "Model Değerlendirme & Yorumlama",   pct: 88, variant: "" },
     ],
-    tags: ["Logistic Reg.", "Random Forest", "SVM", "KNN", "CNN"],
+    tags: ["Logistic Reg.", "Random Forest", "SVM", "KNN", "Ensemble"],
+    focus: "Meme kanseri çok-model karşılaştırmalı analizi",
   },
   {
-    icon: "🗄️",
-    title: "Veri Mühendisliği & BI",
-    sub: "İlişkisel DB tasarımı, sorgu optimizasyonu ve kurumsal BI çözümleri.",
+    icon: "◉",
+    title: "Derin Öğrenme",
+    sub: "Tıbbi görüntü analizi için CNN mimarileri. Gerçek veri setleri üzerinde model eğitimi ve iyileştirme.",
     bars: [
-      { name: "SQL / T-SQL",    pct: 88, variant: "orange-fill" },
-      { name: "Power BI / DAX", pct: 84, variant: "orange-fill" },
-      { name: "PostgreSQL",     pct: 80, variant: "orange-fill" },
+      { name: "CNN Mimarisi & Tasarımı",         pct: 82, variant: "" },
+      { name: "Tıbbi Görüntü Sınıflandırması",   pct: 80, variant: "" },
+      { name: "Model Eğitimi & Fine-tuning",     pct: 78, variant: "" },
     ],
-    tags: ["MS SQL Server", "pgAdmin", "SSMS", "ETL"],
+    tags: ["CNN", "TensorFlow", "Keras", "NumPy", "OpenCV"],
+    focus: "Beyin MRI tümör tespiti ve sınıflandırması",
   },
   {
-    icon: "⚙️",
-    title: "Yazılım Geliştirme",
-    sub: "OOP prensipleri, otomasyon ve API entegrasyonları.",
+    icon: "◎",
+    title: "Veri Mühendisliği",
+    sub: "İlişkisel veritabanı tasarımı ve SQL optimizasyonu. Power BI ile iş zekası çözümleri.",
     bars: [
-      { name: "Python",          pct: 93, variant: "green-fill" },
-      { name: "C# / OOP",       pct: 78, variant: "green-fill" },
-      { name: "Playwright / Git", pct: 82, variant: "green-fill" },
+      { name: "SQL & Veritabanı Tasarımı",  pct: 88, variant: "orange-fill" },
+      { name: "ETL & Veri Modelleme",       pct: 78, variant: "orange-fill" },
+      { name: "İş Zekası & Raporlama",     pct: 80, variant: "orange-fill" },
     ],
-    tags: ["Twilio API", "VS Code", "Web Scraping", "Git"],
+    tags: ["T-SQL", "PostgreSQL", "MS SQL Server", "Power BI", "DAX"],
+    focus: null,
   },
 ];
 
@@ -42,14 +45,12 @@ export default function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Scroll reveal
     const revealObserver = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
       { threshold: 0.1 }
     );
     sectionRef.current?.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
-    // Skill bar fills
     const fillObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -91,7 +92,7 @@ export default function Skills() {
             className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold tracking-tight leading-none"
             style={{ color: "var(--text)" }}
           >
-            Beceriler
+            Uzmanlık Alanları
           </h2>
           <div
             className="flex-1 h-px"
@@ -131,7 +132,12 @@ export default function Skills() {
                 style={{ background: "var(--cyan)", transform: "scaleX(0)" }}
               />
 
-              <div className="text-2xl mb-4">{group.icon}</div>
+              <div
+                className="text-lg mb-4 font-mono"
+                style={{ color: "var(--cyan)" }}
+              >
+                {group.icon}
+              </div>
               <div
                 className="text-sm font-bold mb-1 tracking-[0.05em]"
                 style={{ color: "var(--text)" }}
@@ -193,6 +199,20 @@ export default function Skills() {
                   </span>
                 ))}
               </div>
+
+              {/* Active focus indicator */}
+              {group.focus && (
+                <div
+                  className="mt-5 pt-4 text-[0.6rem] tracking-[0.03em]"
+                  style={{
+                    borderTop: "1px solid var(--border)",
+                    color: "var(--muted)",
+                  }}
+                >
+                  <span style={{ color: "var(--cyan)" }}>▸</span>{" "}
+                  {group.focus}
+                </div>
+              )}
             </div>
           ))}
         </div>
