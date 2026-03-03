@@ -52,6 +52,14 @@ export default function Hero() {
     >
       <div className="w-full max-w-5xl mx-auto pt-20 lg:pt-24">
 
+        {/* Mobile-only cube — sits above all text, hidden on lg+ */}
+        <div
+          className="lg:hidden flex justify-center mb-8 opacity-0 animate-fade-up"
+          style={{ animationDelay: "80ms", animationFillMode: "forwards" }}
+        >
+          <DataScienceCube size={200} />
+        </div>
+
         {/* Eyebrow */}
         <div
           className="flex items-center gap-4 mb-3 opacity-0 animate-fade-up"
