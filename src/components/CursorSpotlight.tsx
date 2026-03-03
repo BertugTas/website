@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CursorSpotlight() {
   const elRef = useRef<HTMLDivElement>(null);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window) {
+      setIsTouch(true);
+      return;
+    }
+
     const el = elRef.current;
     if (!el) return;
 
@@ -43,6 +49,8 @@ export default function CursorSpotlight() {
       document.removeEventListener("mouseout",  onOut);
     };
   }, []);
+
+  if (isTouch) return null;
 
   return (
     <div

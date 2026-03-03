@@ -93,9 +93,9 @@ export default function Projects() {
               <div
                 key={project.title}
                 className={`group relative overflow-hidden transition-colors duration-300 flex flex-col ${
-                  isFeatured ? "col-span-2 md:grid md:flex-none md:grid-cols-[1fr_auto] gap-8 md:items-start" : ""
+                  isFeatured ? "md:col-span-2 md:grid md:flex-none md:grid-cols-[1fr_auto] gap-8 md:items-start" : ""
                 }`}
-                style={{ background: "var(--bg2)", padding: "2rem" }}
+                style={{ background: "var(--bg2)", padding: "2rem", width: "100%", maxWidth: "100%" }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--bg3)")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--bg2)")}
               >
@@ -106,7 +106,10 @@ export default function Projects() {
                 />
 
                 {/* Text content */}
-                <div className="min-w-0 w-full flex flex-col flex-1">
+                <div
+                  className="min-w-0 w-full flex flex-col flex-1"
+                  style={{ width: "100%", minWidth: 0, maxWidth: "100%", overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "normal" }}
+                >
                   <div className="flex justify-between items-start mb-5">
                     <span
                       className="text-[0.6rem] uppercase tracking-[0.2em] px-2 py-0.5"
