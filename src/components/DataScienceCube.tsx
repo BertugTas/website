@@ -181,7 +181,7 @@ export default function DataScienceCube({ size = 260, className = "" }: DataScie
   return (
     <div
       className={`relative aspect-square cube-float ${className}`}
-      style={{ width: `${stageSize}px`, cursor: "crosshair" }}
+      style={{ width: `${stageSize}px` }}
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setSpotlight({ x: e.clientX - rect.left, y: e.clientY - rect.top });

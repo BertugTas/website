@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Global cursor: none — glow cursor replaces all browser cursors ── */
+*, *::before, *::after,
+html, body, div, span, canvas, svg,
+a, button, input, textarea, select, label {
+  cursor: none !important;
+}
+
 :root {
   --background: #080808;
   --foreground: #e8e8e8;

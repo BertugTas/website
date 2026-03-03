@@ -3,60 +3,65 @@
 import { useEffect, useRef } from "react";
 
 export default function CursorSpotlight() {
-  const dotRef  = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const dot  = dotRef.current;
-    const ring = ringRef.current;
-    if (!dot || !ring) return;
+    const el = elRef.current;
+    if (!el) return;
 
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    let rx = mx, ry = my;
-    let raf: number;
+    const BASE_SHADOW =
+      "0 0 8px 3px rgba(0,229,255,0.6), 0 0 20px 6px rgba(0,229,255,0.25), 0 0 40px 10px rgba(0,229,255,0.1)";
+    const HOVER_SHADOW =
+      "0 0 10px 4px rgba(0,229,255,0.75), 0 0 26px 8px rgba(0,229,255,0.35), 0 0 50px 14px rgba(0,229,255,0.15)";
 
     const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      dot.style.left = mx + "px";
-      dot.style.top  = my + "px";
+      el.style.left = e.clientX + "px";
+      el.style.top  = e.clientY + "px";
     };
 
-    const animateRing = () => {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + "px";
-      ring.style.top  = ry + "px";
-      raf = requestAnimationFrame(animateRing);
+    const onOver = (e: MouseEvent) => {
+      if ((e.target as Element).closest("a, button")) {
+        el.style.transform  = "translate(-50%,-50%) scale(1.6)";
+        el.style.boxShadow  = HOVER_SHADOW;
+      }
     };
 
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(animateRing);
+    const onOut = (e: MouseEvent) => {
+      if ((e.target as Element).closest("a, button")) {
+        el.style.transform  = "translate(-50%,-50%) scale(1)";
+        el.style.boxShadow  = BASE_SHADOW;
+      }
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver);
+    document.addEventListener("mouseout",  onOut);
 
     return () => {
       window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout",  onOut);
     };
   }, []);
 
   return (
-    <>
-      {/* Cyan dot */}
-      <div
-        ref={dotRef}
-        className="pointer-events-none fixed z-[9999] w-2 h-2 rounded-full -translate-x-1/2 -translate-y-1/2"
-        style={{
-          background: "#00e5ff",
-          boxShadow: "0 0 10px #00e5ff, 0 0 20px #00e5ff",
-        }}
-      />
-      {/* Ring */}
-      <div
-        ref={ringRef}
-        className="pointer-events-none fixed z-[9998] w-8 h-8 rounded-full -translate-x-1/2 -translate-y-1/2"
-        style={{ border: "1px solid rgba(0,229,255,0.4)" }}
-      />
-    </>
+    <div
+      ref={elRef}
+      id="glow-cursor"
+      style={{
+        position:     "fixed",
+        pointerEvents:"none",
+        zIndex:       9999,
+        width:        "10px",
+        height:       "10px",
+        borderRadius: "50%",
+        background:   "#00e5ff",
+        transform:    "translate(-50%, -50%)",
+        boxShadow:    "0 0 8px 3px rgba(0,229,255,0.6), 0 0 20px 6px rgba(0,229,255,0.25), 0 0 40px 10px rgba(0,229,255,0.1)",
+        transition:   "transform 0.15s ease",
+        left:         "-100px",
+        top:          "-100px",
+      }}
+    />
   );
 }

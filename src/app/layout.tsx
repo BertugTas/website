@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bertuğ Taş",
+  title: "Bertuğ Taş — ML Engineer & Data Scientist",
   description:
     "Dokuz Eylül Üniversitesi Bilgisayar Bilimi öğrencisi. Makine öğrenmesi, derin öğrenme ve veri mühendisliği.",
   keywords: [
@@ -29,12 +29,18 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Bertuğ Taş" }],
   openGraph: {
-    title: "Bertuğ Taş",
-    description: "Makine öğrenmesi, derin öğrenme ve veri mühendisliği.",
-    url: "https://bertugtas.com.tr",
+    title: "Bertuğ Taş — ML Engineer & Data Scientist",
+    description:
+      "Dokuz Eylül Üniversitesi Bilgisayar Bilimi öğrencisi. Makine öğrenmesi, derin öğrenme ve veri mühendisliği.",
+    url: "https://www.bertugtas.com.tr",
     siteName: "Bertuğ Taş",
     locale: "tr_TR",
     type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Bertuğ Taş — ML Engineer & Data Scientist",
+    description: "ML · Deep Learning · Data Engineering · İzmir",
   },
   robots: { index: true, follow: true },
 };

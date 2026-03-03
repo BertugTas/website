@@ -16,6 +16,19 @@ const stack: Record<string, string[]> = {
   "Kurumsal Veritabanı Yönetim Sistemi":             ["C#", "OOP", "MS SQL Server", "T-SQL", "Windows Forms"],
 };
 
+const badges: Record<string, string[]> = {
+  "Brain MRI Tumor Classification System":           ["CNN Architecture", "Medical Imaging", "Multi-class"],
+  "Beyin MRI Tümör Sınıflandırma Sistemi":           ["CNN Architecture", "Medical Imaging", "Multi-class"],
+  "Cancer Diagnosis Model — Multi-Algorithm Analysis": ["4 Algorithms Compared", "ROC", "Confusion Matrix"],
+  "Kanser Teşhis Modeli — Çok Algoritma Analizi":    ["4 Algorithms Compared", "ROC", "Confusion Matrix"],
+  "Enterprise BI Dashboard":                          ["DAX", "Star Schema", "KPI Tracking"],
+  "Kurumsal İş Zekası Dashboard":                    ["DAX", "Star Schema", "KPI Tracking"],
+  "Automated Data Collection & Alerting System":      ["Scheduled Pipeline", "SMS Alert", "Auto Filter"],
+  "Otomatik Veri Toplama & Uyarı Sistemi":           ["Scheduled Pipeline", "SMS Alert", "Auto Filter"],
+  "Enterprise Database Management System":            ["CRUD", "Role-based Auth", "Reporting Module"],
+  "Kurumsal Veritabanı Yönetim Sistemi":             ["CRUD", "Role-based Auth", "Reporting Module"],
+};
+
 const metrics: Record<string, { val: string; valColor: string; key: string }[]> = {
   "Brain MRI Tumor Classification System": [
     { val: "CNN", valColor: "var(--cyan)", key: "Architecture" },
@@ -71,6 +84,7 @@ export default function Projects() {
             const isFeatured = project.featured;
             const projectStack = stack[project.title] ?? [];
             const projectMetrics = metrics[project.title];
+            const projectBadges = badges[project.title] ?? [];
 
             return (
               <a
@@ -79,7 +93,7 @@ export default function Projects() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`group block relative overflow-hidden transition-colors duration-300 ${
-                  isFeatured ? "col-span-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-center" : ""
+                  isFeatured ? "col-span-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-start" : ""
                 }`}
                 style={{ background: "var(--bg2)", padding: "2rem" }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--bg3)")}
@@ -90,16 +104,16 @@ export default function Projects() {
                   style={{ background: "linear-gradient(135deg, rgba(103,232,249,0.03), transparent)" }}
                 />
 
-                <div>
+                <div className="min-w-0 w-full">
                   <div className="flex justify-between items-start mb-5">
                     <span
                       className="text-[0.6rem] uppercase tracking-[0.2em] px-2 py-0.5"
-                      style={{ color: "var(--muted2)", border: "1px solid var(--border)" }}
+                      style={{ color: "var(--muted2)", border: "1px solid var(--border)", overflowWrap: "break-word", wordBreak: "break-word" }}
                     >
                       {project.area}
                     </span>
                     <span
-                      className="text-base transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      className="text-base transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0 ml-2"
                       style={{ color: "var(--muted)" }}
                     >
                       ↗
@@ -108,14 +122,36 @@ export default function Projects() {
 
                   <div
                     className={`font-bold mb-3 leading-snug ${isFeatured ? "text-2xl" : "text-lg"}`}
-                    style={{ color: "var(--text)" }}
+                    style={{ color: "var(--text)", overflowWrap: "break-word", wordBreak: "break-word" }}
                   >
                     {project.title}
                   </div>
 
-                  <p className="text-[0.72rem] leading-[1.8] mb-5" style={{ color: "var(--muted2)" }}>
+                  <p
+                    className="text-[0.72rem] leading-[1.8] mb-4"
+                    style={{ color: "var(--muted2)", overflowWrap: "break-word", wordBreak: "break-word" }}
+                  >
                     {project.description}
                   </p>
+
+                  {/* Metric badges */}
+                  {projectBadges.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {projectBadges.map((b) => (
+                        <span
+                          key={b}
+                          className="text-[0.6rem] tracking-[0.08em] px-2 py-0.5"
+                          style={{
+                            background: "rgba(103,232,249,0.05)",
+                            border: "1px solid rgba(103,232,249,0.2)",
+                            color: "var(--cyan)",
+                          }}
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="flex flex-wrap gap-1.5">
                     {projectStack.map((s) => (
@@ -131,7 +167,7 @@ export default function Projects() {
                 </div>
 
                 {isFeatured && projectMetrics && (
-                  <div className="flex md:flex-col gap-3">
+                  <div className="flex flex-col gap-3 shrink-0">
                     {projectMetrics.map((m) => (
                       <div
                         key={m.key}

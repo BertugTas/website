@@ -48,7 +48,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center px-6 md:px-12 z-[1]"
+      className="relative min-h-screen flex items-center px-6 md:px-12 z-[1] overflow-x-hidden"
     >
       <div className="w-full max-w-5xl mx-auto pt-20 lg:pt-24">
 
@@ -126,7 +126,7 @@ export default function Hero() {
 
         {/* Metrics */}
         <div
-          className="flex gap-8 mb-10 opacity-0 animate-fade-up"
+          className="flex flex-wrap gap-8 mb-10 opacity-0 animate-fade-up"
           style={{
             animationDelay: `${nameEnd + 120}ms`,
             animationFillMode: "forwards",
