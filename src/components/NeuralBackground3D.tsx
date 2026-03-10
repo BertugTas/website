@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-const N = 65;
+const N = 35;
 const BOUND = 8;
 const CONNECT_DIST = 3.4;
 const MAX_EDGES = (N * (N - 1)) / 2;
@@ -36,7 +36,7 @@ function Network() {
 
   const linePosArr = useMemo(() => new Float32Array(MAX_EDGES * 6), []);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock, invalidate }) => {
     for (let i = 0; i < N; i++) {
       const i3 = i * 3;
       pos[i3]     += vel[i3];
@@ -79,6 +79,8 @@ function Network() {
       groupRef.current.rotation.y = clock.elapsedTime * 0.045;
       groupRef.current.rotation.x = Math.sin(clock.elapsedTime * 0.022) * 0.18;
     }
+
+    invalidate(); // schedule next frame (frameloop="demand")
   });
 
   return (
@@ -125,8 +127,9 @@ export default function NeuralBackground3D() {
     >
       <Canvas
         camera={{ fov: 58, position: [0, 0, 14] }}
-        dpr={[1, 1.4]}
-        gl={{ antialias: false, alpha: true, powerPreference: "default" }}
+        frameloop="demand"
+        dpr={1}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
         style={{ background: "transparent", width: "100%", height: "100%" }}
       >
         <Network />

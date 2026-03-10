@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import DataScienceCube from "@/components/DataScienceCube";
 import { useLanguage, T } from "@/context/LanguageContext";
@@ -45,6 +46,16 @@ export default function Hero() {
   const t = T[lang].hero;
   const nameEnd = 200 + (firstName.length + lastName.length) * 60 + 120;
 
+  // null = not yet measured (avoids SSR/hydration mismatch)
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -52,13 +63,15 @@ export default function Hero() {
     >
       <div className="w-full max-w-5xl mx-auto pt-20 lg:pt-24">
 
-        {/* Mobile-only cube — sits above all text, hidden on lg+ */}
-        <div
-          className="lg:hidden flex justify-center mb-8 opacity-0 animate-fade-up"
-          style={{ animationDelay: "80ms", animationFillMode: "forwards" }}
-        >
-          <DataScienceCube size={200} />
-        </div>
+        {/* Mobile-only cube — mounted only when isDesktop is confirmed false */}
+        {isDesktop === false && (
+          <div
+            className="flex justify-center mb-8 opacity-0 animate-fade-up"
+            style={{ animationDelay: "80ms", animationFillMode: "forwards" }}
+          >
+            <DataScienceCube size={200} />
+          </div>
+        )}
 
         {/* Eyebrow */}
         <div
@@ -92,15 +105,18 @@ export default function Hero() {
             />
           </h1>
 
-          <div
-            className="hidden lg:flex shrink-0 translate-x-72 opacity-0 animate-fade-up"
-            style={{
-              animationDelay: `${nameEnd - 40}ms`,
-              animationFillMode: "forwards",
-            }}
-          >
-            <DataScienceCube size={280} />
-          </div>
+          {/* Desktop cube — mounted only when isDesktop is confirmed true */}
+          {isDesktop === true && (
+            <div
+              className="shrink-0 translate-x-72 opacity-0 animate-fade-up"
+              style={{
+                animationDelay: `${nameEnd - 40}ms`,
+                animationFillMode: "forwards",
+              }}
+            >
+              <DataScienceCube size={280} />
+            </div>
+          )}
         </div>
 
         {/* Role paragraph */}

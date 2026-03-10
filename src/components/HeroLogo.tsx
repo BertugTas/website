@@ -191,7 +191,7 @@ export default function HeroLogo() {
       <Canvas
         camera={{ fov: 42, position: [0, 0, 5.5] }}
         dpr={[1, 1.8]}
-        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
         style={{ background: "transparent", width: "100%", height: "100%" }}
       >
         <Particles explodeCount={explode} />

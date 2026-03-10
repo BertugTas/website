@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type LineType = "command" | "output" | "success" | "info" | "blank";
 
@@ -71,9 +72,16 @@ function getColor(type: LineType): string {
 }
 
 export default function MLTerminal() {
+  const { lang } = useLanguage();
   const [lines, setLines] = useState<DisplayLine[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(0);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // Auto-scroll
   useEffect(() => {
@@ -89,6 +97,7 @@ export default function MLTerminal() {
     const id = () => ++idRef.current;
 
     const tick = () => {
+      if (!mountedRef.current) return;
       const script = SCRIPTS[sIdx];
 
       if (lIdx >= script.length) {
@@ -153,7 +162,7 @@ export default function MLTerminal() {
           <span className="w-3 h-3 rounded-full bg-[#28c840]" />
           <span className="ml-4 text-white/25 text-xs tracking-wider">bertuğ@deu: ~</span>
           <span className="ml-auto text-white/15 text-xs tabular-nums">
-            {new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+            {new Date().toLocaleTimeString(lang === "tr" ? "tr-TR" : "en-US", { hour: "2-digit", minute: "2-digit" })}
           </span>
         </div>
 
