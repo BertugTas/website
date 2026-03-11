@@ -18,6 +18,8 @@ const stack: Record<string, string[]> = {
   "Kurumsal Veritabanı Yönetim Sistemi":              ["C#", "OOP", "MS SQL Server", "T-SQL", "Windows Forms"],
   "PredictiveOps Platform — Full-Stack ML Platform":  ["Python", "FastAPI", "Next.js", "Docker", "GitHub Actions"],
   "PredictiveOps Platform — Full-Stack ML Platformu": ["Python", "FastAPI", "Next.js", "Docker", "GitHub Actions"],
+  "bt-flow — Zero-Boilerplate ML Deployment":         ["PyPI", "CLI", "FastAPI", "Pydantic", "Typer"],
+  "bt-flow — Tek Satırda ML Deployment":              ["PyPI", "CLI", "FastAPI", "Pydantic", "Typer"],
 };
 
 const badges: Record<string, string[]> = {
@@ -33,6 +35,13 @@ const badges: Record<string, string[]> = {
   "Kurumsal Veritabanı Yönetim Sistemi":              ["CRUD", "Role-based Auth", "Reporting Module"],
   "PredictiveOps Platform — Full-Stack ML Platform":  ["REST API", "CI/CD", "Docker"],
   "PredictiveOps Platform — Full-Stack ML Platformu": ["REST API", "CI/CD", "Docker"],
+  "bt-flow — Zero-Boilerplate ML Deployment":         ["Open Source", "PyPI Published", "CI / CD"],
+  "bt-flow — Tek Satırda ML Deployment":              ["Açık Kaynak", "PyPI'da Yayında", "CI / CD"],
+};
+
+const pypiLinks: Record<string, string> = {
+  "bt-flow — Zero-Boilerplate ML Deployment": "https://pypi.org/project/bt-flow/",
+  "bt-flow — Tek Satırda ML Deployment":      "https://pypi.org/project/bt-flow/",
 };
 
 const metrics: Record<string, { val: string; valColor: string; key: string }[]> = {
@@ -87,11 +96,12 @@ export default function Projects() {
           style={{ background: "var(--border)", border: "1px solid var(--border)" }}
         >
           {t.items.map((project) => {
-            const isFeatured    = project.featured;
-            const projectStack  = stack[project.title]   ?? [];
+            const isFeatured     = project.featured;
+            const projectStack   = stack[project.title]     ?? [];
             const projectMetrics = metrics[project.title];
-            const projectBadges = badges[project.title]  ?? [];
-            const projectSlug   = slugMap[project.title] ?? "";
+            const projectBadges  = badges[project.title]    ?? [];
+            const projectSlug    = slugMap[project.title]   ?? "";
+            const projectPypi    = pypiLinks[project.title] ?? "";
 
             return (
               <div
@@ -194,9 +204,11 @@ export default function Projects() {
                       </a>
                     )}
 
-                    {projectSlug && (
-                      <Link
-                        href={`/projects/${projectSlug}`}
+                    {projectPypi ? (
+                      <a
+                        href={projectPypi}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] px-4 py-2 transition-all duration-200"
                         style={{ background: "var(--cyan)", color: "var(--bg)" }}
                         onMouseEnter={(e) =>
@@ -207,8 +219,25 @@ export default function Projects() {
                           ((e.currentTarget as HTMLElement).style.boxShadow = "none")
                         }
                       >
-                        {lang === "tr" ? "Vaka Analizi →" : "Case Study →"}
-                      </Link>
+                        PYPI ↗
+                      </a>
+                    ) : (
+                      projectSlug && (
+                        <Link
+                          href={`/projects/${projectSlug}`}
+                          className="inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] px-4 py-2 transition-all duration-200"
+                          style={{ background: "var(--cyan)", color: "var(--bg)" }}
+                          onMouseEnter={(e) =>
+                            ((e.currentTarget as HTMLElement).style.boxShadow =
+                              "0 0 16px rgba(0,229,255,0.35)")
+                          }
+                          onMouseLeave={(e) =>
+                            ((e.currentTarget as HTMLElement).style.boxShadow = "none")
+                          }
+                        >
+                          {lang === "tr" ? "Vaka Analizi →" : "Case Study →"}
+                        </Link>
+                      )
                     )}
                   </div>
                 </div>

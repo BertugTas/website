@@ -136,6 +136,13 @@ export const T = {
           description: "FastAPI backend, Next.js dashboard ve modüler ML pipeline'ından oluşan production-style makine öğrenmesi platformu. Docker Compose ile tek komutta ayağa kalkan tam stack deployment; GitHub Actions CI ile otomatik kalite kontrol.",
           href: "https://github.com/BertugTas/predictiveops-platform",
         },
+        {
+          featured: false,
+          title: "bt-flow — Tek Satırda ML Deployment",
+          area: "AÇIK KAYNAK · MLOPS",
+          description: "PyPI üzerinde yayınlanan, scikit-learn modellerini tek satırda production'a hazır FastAPI REST API'lerine dönüştüren açık kaynaklı Python kütüphanesi. Dinamik Pydantic şema çıkarımı içerir.",
+          href: "https://github.com/BertugTas/bt-flow",
+        },
       ],
     },
     contact: {
@@ -258,6 +265,13 @@ export const T = {
           area: "MLOps · Full-Stack AI Engineering",
           description: "Production-style ML platform with FastAPI backend, Next.js dashboard, and modular ML pipeline. Full-stack deployment with Docker Compose in a single command; automated quality checks via GitHub Actions CI.",
           href: "https://github.com/BertugTas/predictiveops-platform",
+        },
+        {
+          featured: false,
+          title: "bt-flow — Zero-Boilerplate ML Deployment",
+          area: "OPEN SOURCE · MLOPS",
+          description: "An open-source Python package published on PyPI that wraps trained scikit-learn models into production-ready FastAPI REST APIs in a single line of code. Features dynamic schema inference.",
+          href: "https://github.com/BertugTas/bt-flow",
         },
       ],
     },
